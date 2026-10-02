@@ -1,0 +1,11 @@
+{
+  "appId": "com.wallach.tests",
+  "appName": "Wallach's Tests",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": true
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
