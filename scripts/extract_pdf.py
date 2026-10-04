@@ -3,16 +3,18 @@ import json
 import re
 import os
 import sys
-
-PDF_PATH = "import glob
+import glob
 
 _pdf_files = glob.glob("*.pdf")
 if not _pdf_files:
     print("ERROR: no PDF file found in repository root")
     sys.exit(1)
 PDF_PATH = _pdf_files[0]
-print("Using PDF: " + PDF_PATH)"
+print("Using PDF: " + PDF_PATH)
+
 OUTPUT = "extracted.json"
+
+
 def clean_text(text):
     text = re.sub(r'\n{3,}', '\n\n', text)
     text = re.sub(r'[ \t]+', ' ', text)
@@ -33,7 +35,7 @@ def extract_pages(pdf_path):
         text = page.get_text("text")
         pages.append({"page": i + 1, "text": clean_text(text)})
         if i % 100 == 0:
-            print("  -> " + str(i+1) + "/" + str(total))
+            print("  -> " + str(i + 1) + "/" + str(total))
 
     doc.close()
     return pages
