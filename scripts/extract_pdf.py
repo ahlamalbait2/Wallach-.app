@@ -4,7 +4,7 @@ import re
 import os
 import sys
 
-PDF_PATH = "wallach.pdf"
+PDF_PATH = "Wallach's Interpretation of Diagnostic Tests Pathways to Arriving at a Clinical Diagnosis South Asian Edition(1).pdf"
 OUTPUT = "extracted.json"
 
 
