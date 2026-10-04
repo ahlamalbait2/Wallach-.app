@@ -4,7 +4,14 @@ import re
 import os
 import sys
 
-PDF_PATH = "Wallach's Interpretation of Diagnostic Tests Pathways to Arriving at a Clinical Diagnosis South Asian Edition(1).pdf"
+PDF_PATH = "import glob
+
+_pdf_files = glob.glob("*.pdf")
+if not _pdf_files:
+    print("ERROR: no PDF file found in repository root")
+    sys.exit(1)
+PDF_PATH = _pdf_files[0]
+print("Using PDF: " + PDF_PATH)"
 OUTPUT = "extracted.json"
 def clean_text(text):
     text = re.sub(r'\n{3,}', '\n\n', text)
