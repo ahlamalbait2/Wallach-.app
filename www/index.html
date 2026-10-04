@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Wallach's Diagnostic Tests</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>Wallach's Diagnostic Tests</h1>
+  <div class="search-wrap">
+    <input id="search" type="search" placeholder="Search test, disease, or symptom..." autocomplete="off">
+    <button id="clearBtn" aria-label="clear">X</button>
+  </div>
+</header>
+
+<div id="loading" class="center">
+  <div class="spinner"></div>
+  <p>Loading database...</p>
+</div>
+
+<main id="results"></main>
+
+<div id="reader" class="reader hidden">
+  <div class="reader-header">
+    <button id="backBtn">Back</button>
+    <button id="bookmarkBtn">Bookmark</button>
+  </div>
+  <div id="readerContent" class="reader-content"></div>
+</div>
+
+<footer id="stats" class="hidden"></footer>
+
+<script src="sql-wasm.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
