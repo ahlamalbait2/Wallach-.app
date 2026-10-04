@@ -6,8 +6,6 @@ import sys
 
 PDF_PATH = "Wallach's Interpretation of Diagnostic Tests Pathways to Arriving at a Clinical Diagnosis South Asian Edition(1).pdf"
 OUTPUT = "extracted.json"
-
-
 def clean_text(text):
     text = re.sub(r'\n{3,}', '\n\n', text)
     text = re.sub(r'[ \t]+', ' ', text)
