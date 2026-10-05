@@ -37,16 +37,32 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Node dependencies
+      - name: Create package.json on the fly
         run: |
-          echo "Current directory before npm: $(pwd)"
-          ls -la
-          npm install
-          echo "Current directory after npm: $(pwd)"
+          cat > package.json << 'PKGEOF'
+          {
+            "name": "wallachapp",
+            "version": "1.0.0",
+            "private": true,
+            "dependencies": {
+              "@capacitor/android": "^6.1.0",
+              "@capacitor/core": "^6.1.0"
+            },
+            "devDependencies": {
+              "@capacitor/cli": "^6.1.0",
+              "sql.js": "^1.10.3"
+            }
+          }
+          PKGEOF
+          echo "=== package.json created: ==="
+          cat package.json
+          echo "=== Directory contents: ==="
           ls -la
 
-      - name: Install sql.js separately
-        run: npm install sql.js --no-save
+      - name: Install Node dependencies
+        run: |
+          echo "pwd: $(pwd)"
+          npm install
 
       - name: Prepare www folder
         run: |
