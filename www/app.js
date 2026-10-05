@@ -62,20 +62,16 @@ function doSearch(e) {
     return;
   }
 
-  const fts = q.split(/\s+/).filter(Boolean).map(function(w) {
-    return '"' + w.replace(/"/g, '') + '"*';
-  }).join(' ');
+  const pattern = '%' + q + '%';
 
   try {
     const stmt = db.prepare(
-      "SELECT s.id, s.title, s.page, " +
-      "snippet(sections_fts, 1, '<mark>', '</mark>', '...', 25) AS snip " +
-      "FROM sections_fts f " +
-      "JOIN sections s ON s.id = f.rowid " +
-      "WHERE sections_fts MATCH ? " +
-      "ORDER BY rank LIMIT 40"
+      "SELECT id, title, page, substr(content, 1, 300) AS snip " +
+      "FROM sections " +
+      "WHERE title LIKE ? OR content LIKE ? " +
+      "ORDER BY id LIMIT 40"
     );
-    stmt.bind([fts]);
+    stmt.bind([pattern, pattern]);
 
     let html = '';
     let count = 0;
@@ -83,7 +79,7 @@ function doSearch(e) {
       const r = stmt.getAsObject();
       html += '<div class="card" data-id="' + r.id + '">' +
         '<h3>' + esc(r.title) + '</h3>' +
-        '<p>' + r.snip + '</p>' +
+        '<p>' + highlight(esc(r.snip), q) + '</p>' +
         '<span class="page-badge">Page ' + r.page + '</span>' +
         '</div>';
       count++;
@@ -103,6 +99,18 @@ function doSearch(e) {
   } catch (err) {
     resultsDiv.innerHTML = '<div class="card"><p style="color:red">Error: ' + err.message + '</p></div>';
   }
+}
+
+function highlight(text, query) {
+  if (!query) return text;
+  const words = query.split(/\s+/).filter(Boolean);
+  let result = text;
+  words.forEach(function(w) {
+    if (w.length < 2) return;
+    const re = new RegExp('(' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+    result = result.replace(re, '<mark>$1</mark>');
+  });
+  return result;
 }
 
 function openSection(id) {
