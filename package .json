@@ -1,10 +1,12 @@
 {
-  "name": "wallach-app",
+  "name": "wallachapp",
   "version": "1.0.0",
-  "description": "Wallach's Interpretation of Diagnostic Tests",
+  "private": true,
   "dependencies": {
     "@capacitor/android": "^6.1.0",
-    "@capacitor/core": "^6.1.0",
+    "@capacitor/core": "^6.1.0"
+  },
+  "devDependencies": {
     "@capacitor/cli": "^6.1.0",
     "sql.js": "^1.10.3"
   }
