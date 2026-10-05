@@ -13,6 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Show workspace contents
+        run: |
+          echo "Current directory: $(pwd)"
+          ls -la
+
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
@@ -33,7 +38,15 @@ jobs:
           node-version: '20'
 
       - name: Install Node dependencies
-        run: npm install
+        run: |
+          echo "Current directory before npm: $(pwd)"
+          ls -la
+          npm install
+          echo "Current directory after npm: $(pwd)"
+          ls -la
+
+      - name: Install sql.js separately
+        run: npm install sql.js --no-save
 
       - name: Prepare www folder
         run: |
