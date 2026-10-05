@@ -13,10 +13,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Show workspace contents
-        run: |
-          echo "Current directory: $(pwd)"
-          ls -la
+      - name: Show initial contents
+        run: ls -la
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -37,9 +35,9 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Create package.json on the fly
+      - name: Create ALL config files programmatically
         run: |
-          cat > package.json << 'PKGEOF'
+          cat > package.json << 'EOF'
           {
             "name": "wallachapp",
             "version": "1.0.0",
@@ -53,22 +51,44 @@ jobs:
               "sql.js": "^1.10.3"
             }
           }
-          PKGEOF
-          echo "=== package.json created: ==="
-          cat package.json
-          echo "=== Directory contents: ==="
+          EOF
+
+          cat > capacitor.config.json << 'EOF'
+          {
+            "appId": "com.wallach.tests",
+            "appName": "Wallach Tests",
+            "webDir": "www",
+            "server": {
+              "androidScheme": "https"
+            }
+          }
+          EOF
+
+          echo "=== Files created ==="
           ls -la
+          echo "=== package.json ==="
+          cat package.json
+          echo "=== capacitor.config.json ==="
+          cat capacitor.config.json
 
       - name: Install Node dependencies
-        run: |
-          echo "pwd: $(pwd)"
-          npm install
+        run: npm install
 
-      - name: Prepare www folder
+      - name: Verify sql.js exists
         run: |
+          ls -la node_modules/sql.js/dist/
+          echo "Checking for sql-wasm.js..."
+          test -f node_modules/sql.js/dist/sql-wasm.js && echo "sql-wasm.js FOUND" || echo "sql-wasm.js MISSING"
+          test -f node_modules/sql.js/dist/sql-wasm.wasm && echo "sql-wasm.wasm FOUND" || echo "sql-wasm.wasm MISSING"
+
+      - name: Copy files to www folder
+        run: |
+          mkdir -p www
           cp node_modules/sql.js/dist/sql-wasm.js www/
           cp node_modules/sql.js/dist/sql-wasm.wasm www/
           cp wallach.sqlite www/
+          echo "=== www contents ==="
+          ls -la www/
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
